@@ -1,0 +1,15 @@
+* {
+    /* first three rules override browser defaults */
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    /* stops long words from overflowing */
+    overflow-wrap: break-word;
+    /* remove dotted outline around links */
+    outline: none;
+}
+
+.nav-photo {
+	max-height: 35px;
+	max-width: 35px;
+}
