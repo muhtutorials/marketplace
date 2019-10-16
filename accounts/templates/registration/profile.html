@@ -1,0 +1,34 @@
+<div class="profile">
+  <div>
+    {# profile image and edit button #}
+    <img src="{{ profile.image.url }}" alt="user profile picture">
+    {% if profile.user == user %}
+      <a href="{% url 'profile_edit' %}"><button class="profile-btn">Edit Profile</button></a>
+    {% endif %}
+  </div>
+  <div>
+    <div class="profile-top clearfix">
+      <h2>{{ profile.user.username }}'s Profile</h2>
+      {% if profile.user != user and user.is_authenticated %}
+        <button class="follow profile-btn-follow btn-small {% if user.profile in profile.followers.all %}btn-red{% else %}btn-blue{% endif %}" data-api-follow-pk="{{ profile.get_api_follow_pk }}">
+          {% if user.profile in profile.followers.all %}Unfollow{% else %}Follow{% endif %}
+        </button>
+      {% endif %}
+    </div>
+    <p><strong>First name:</strong> {{ profile.user.first_name }}</p>
+    <p><strong>Last name:</strong> {{ profile.user.last_name }}</p>
+    {# if "make email visible" checkbox is checked show email #}
+    {% if profile.email_is_visible %}<p><strong>Email:</strong> {{ profile.user.email }}</p>{% endif %}
+    <p><strong>Bio:</strong> {{ profile.bio }}</p>
+  </div>
+</div>
+
+{# links to user's posts, following and followers, saved post is only displayed to the owner of the profile #}
+<div class="profile-bar">
+    <a href="{% url 'profile' profile.pk %}"><div>{{ profile.user.username }}'s posts <br>({{ profile.user.post_set.count }})</div></a>
+    {% if profile.user == user %}
+      <a href="{% url 'profile_saved' profile.pk %}"><div>Saved posts <br>({{ profile.user.saved_posts.count }})</div></a>
+    {% endif %}
+    <a href="{% url 'profile_following' profile.pk %}"><div>Following <br>({{ profile.following.count }})</div></a>
+    <a href="{% url 'profile_followers' profile.pk %}"><div>Followers <br>({{ profile.followers.count }})</div></a>
+</div>

@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import ListView
 
-# from .models import Job
+from .models import Job
 
 
-class HomeView(TemplateView):
-	template_name = 'jobs/base.html'
+class HomeView(ListView):
+	model = Job
+	template_name = 'jobs/home.html'

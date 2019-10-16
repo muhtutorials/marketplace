@@ -26,6 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # 3rd party packages
+    'crispy_forms',
+
     # my apps
     'accounts.apps.AccountsConfig',
     'jobs.apps.JobsConfig',
@@ -114,3 +117,8 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # specifies the folder for uploaded image files
 MEDIA_URL = '/media/'  # specifies url for the image folder
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# redirect to home page after login
+LOGIN_REDIRECT_URL = '/'
