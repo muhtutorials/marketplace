@@ -7,7 +7,7 @@
     <div class="card-body">
       <h5 class="card-title">{{ job.title }}</h5>
         <span class="status text-{% if job.get_status == 'Done' %}danger{% elif job.get_status == 'Taken' %}warning{% else %}success{% endif %}">
-          {{ job.get_status }}
+          {{ job.get_status }} {% if job.freelancer and user == job.employer.user %}(by <a href="#" class="status-username">{{ job.freelancer.user }}</a>){% endif %}
         </span>
       <p class="card-text">{{ job.description }}</p>
       <p class="card-text">Budget: <span class="font-weight-bold">${{ job.budget }}</span></p>

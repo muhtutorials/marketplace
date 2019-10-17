@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView, CreateView, View
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 
@@ -30,6 +30,7 @@ class JobCreateView(CreateView):
 class AcceptView(LoginRequiredMixin, View):
 	def get(self, *args, **kwargs):
 		job = get_object_or_404(Job, pk=self.kwargs['pk'])
+		# allow the job to be taken by only one user
 		if not job.freelancer:
 			profile = get_object_or_404(Profile, user=self.request.user)
 			job.freelancer = profile
@@ -38,30 +39,24 @@ class AcceptView(LoginRequiredMixin, View):
 		return redirect(job.get_absolute_url())
 
 
-class DeclineView(LoginRequiredMixin, UserPassesTestMixin, View):
+class DeclineView(LoginRequiredMixin, View):
 	def get(self, *args, **kwargs):
 		job = get_object_or_404(Job, pk=self.kwargs['pk'])
-		job.freelancer = None
-		job.is_done = False
-		job.save()
-		messages.error(self.request, "Job has been declined")
+		# allow only the user who has taken the job to decline it
+		if self.request.user.profile == job.freelancer:
+			job.freelancer = None
+			job.is_done = False
+			job.save()
+			messages.error(self.request, "Job has been declined")
 		return redirect(job.get_absolute_url())
 
-	# check if user is the user who has taken the job
-	def test_func(self):
-		job = get_object_or_404(Job, pk=self.kwargs['pk'])
-		return self.request.user.profile == job.freelancer
 
-
-class DoneView(LoginRequiredMixin, UserPassesTestMixin, View):
+class DoneView(LoginRequiredMixin, View):
 	def get(self, *args, **kwargs):
 		job = get_object_or_404(Job, pk=self.kwargs['pk'])
-		job.is_done = True
-		job.save()
-		messages.success(self.request, "Job has been done")
+		# allow only the user who has taken the job to mark it as done
+		if self.request.user.profile == job.freelancer:
+			job.is_done = True
+			job.save()
+			messages.success(self.request, "Job has been done")
 		return redirect(job.get_absolute_url())
-
-	# check if user is the user who has taken the job
-	def test_func(self):
-		job = get_object_or_404(Job, pk=self.kwargs['pk'])
-		return self.request.user.profile == job.freelancer
