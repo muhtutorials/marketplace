@@ -19,6 +19,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # my apps should come before django apps so on logout user is redirected to custom logout page
+    # my apps
+    'accounts.apps.AccountsConfig',
+    'jobs.apps.JobsConfig',
+
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,10 +34,6 @@ INSTALLED_APPS = [
 
     # 3rd party packages
     'crispy_forms',
-
-    # my apps
-    'accounts.apps.AccountsConfig',
-    'jobs.apps.JobsConfig',
 ]
 
 MIDDLEWARE = [

@@ -17,8 +17,9 @@
 .card-header {
     position: relative;
 }
+
 .status {
     position: absolute;
-    top: 0;
-    right: 0.5rem;
+    top: 0.2rem;
+    right: 0.7rem;
 }

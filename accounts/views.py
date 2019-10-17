@@ -6,7 +6,6 @@ from .forms import UserSignupForm
 
 
 def signup(request):
-    next_page = request.GET.get('next')  # page to redirect to after registering (previous page)
     if request.method == 'POST':
         form = UserSignupForm(request.POST)
         if form.is_valid():
@@ -18,7 +17,7 @@ def signup(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect(next_page)
+                return redirect('/')
             else:
                 return HttpResponse('User does not exist')
 
